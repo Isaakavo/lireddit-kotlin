@@ -1,5 +1,6 @@
 package com.lireddit.example.usecases.post
 
+import com.lireddit.example.graphql.types.PaginatedPosts
 import com.lireddit.example.graphql.types.PostType
 import org.springframework.stereotype.Service
 import kotlin.math.min
@@ -15,13 +16,15 @@ class PostSearcher(private val postsQuery: PostsQuery) {
         return postsQuery.findById(id)
     }
 
-    fun allPosts(limit: Int, cursor: String?): List<PostType>{
+    fun paginatedPosts(limit: Int, cursor: String?): PaginatedPosts{
         val realLimit = min(50, limit)
         val realLimitPlusOne = realLimit + 1
         val posts =  postsQuery.findByLimit(realLimit, cursor)
+        val hasMore = posts.size == realLimitPlusOne
 
         println("Real limit value: $realLimit")
+        println("Posts size: ${posts.size}")
 
-        return posts.toList().slice(0 until realLimit)
+        return PaginatedPosts(posts.toList().slice(0 until realLimit), hasMore)
     }
 }
