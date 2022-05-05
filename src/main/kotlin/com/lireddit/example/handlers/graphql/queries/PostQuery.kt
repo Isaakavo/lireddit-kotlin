@@ -1,14 +1,9 @@
-package com.lireddit.example.controller
+package com.lireddit.example.handlers.graphql.queries
 
-import com.expediagroup.graphql.generator.execution.OptionalInput
-import com.lireddit.example.entities.*
 import org.springframework.stereotype.Component
 import com.expediagroup.graphql.server.operations.Query
 import com.lireddit.example.graphql.types.PostType
 import com.lireddit.example.usecases.post.PostSearcher
-import java.time.DateTimeException
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @Component
 class PostQuery(private val postSearcher: PostSearcher) : Query {

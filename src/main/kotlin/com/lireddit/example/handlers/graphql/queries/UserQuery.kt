@@ -1,5 +1,6 @@
-package com.lireddit.example.controller
+package com.lireddit.example.handlers.graphql.queries
 
+import com.expediagroup.graphql.server.operations.Query
 import com.lireddit.example.entities.User
 import com.lireddit.example.entities.posts
 import com.lireddit.example.entities.users
@@ -12,12 +13,5 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class UserController {
-//    @Autowired
-//    lateinit var database: Database
-//
-//    @GetMapping("/users/get-by-id")
-//    fun getUserById(@RequestParam("id") id: Int): User? {
-//        return database.users.find { it.id eq id }
-//    }
+class UserQuery: Query {
 }
