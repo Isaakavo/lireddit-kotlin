@@ -1,0 +1,10 @@
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lireddit2
+    username: postgres
+    password: Weisses2
+    dialect: PostgresqlDialect
+
+graphql:
+  packages: "com.lireddit.example"
