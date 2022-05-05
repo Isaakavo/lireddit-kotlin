@@ -7,12 +7,12 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
-@GraphQLName("User")
+@GraphQLName("Usery")
 data class UserType(
-    val id: Int,
+    val id: Int?,
     val username: String,
     val email: String,
-    val createdAt: ZonedDateTime,
+    val createdAt: ZonedDateTime?,
     val updatedAt: String?
 ) {
     constructor(user: User) : this(

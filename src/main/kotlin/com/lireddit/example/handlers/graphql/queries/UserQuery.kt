@@ -2,16 +2,14 @@ package com.lireddit.example.handlers.graphql.queries
 
 import com.expediagroup.graphql.server.operations.Query
 import com.lireddit.example.entities.User
-import com.lireddit.example.entities.posts
-import com.lireddit.example.entities.users
-import org.ktorm.database.Database
-import org.ktorm.dsl.eq
-import org.ktorm.entity.find
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import com.lireddit.example.graphql.types.UserType
+import com.lireddit.example.usecases.user.UserSearcher
+import org.springframework.stereotype.Component
 
-@RestController
-class UserQuery: Query {
+@Component
+class UserQuery(private val userSearcher: UserSearcher) : Query {
+
+    fun user(usernameOrEmail: String): User? {
+        return userSearcher.findOne(usernameOrEmail)
+    }
 }
