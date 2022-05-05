@@ -31,6 +31,7 @@ dependencies {
 	//GraphQl
 	implementation("com.expediagroup:graphql-kotlin-schema-generator:5.3.2")
 	implementation("com.expediagroup:graphql-kotlin-spring-server:5.3.2")
+	implementation("com.graphql-java:graphql-java-extended-scalars:17.0")
 }
 
 tasks.withType<KotlinCompile> {

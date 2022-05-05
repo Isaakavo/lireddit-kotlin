@@ -3,12 +3,10 @@ package com.lireddit.example.entities
 import org.ktorm.database.Database
 import org.ktorm.entity.Entity
 import org.ktorm.entity.sequenceOf
-import org.ktorm.schema.Table
-import org.ktorm.schema.date
-import org.ktorm.schema.int
-import org.ktorm.schema.varchar
+import org.ktorm.schema.*
 import java.sql.Date
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class User
     (
@@ -17,7 +15,7 @@ data class User
     val email: String,
     val password: String?,
     //Updoots
-    val createdAt: String?,
+    val createdAt: LocalDateTime,
     val updatedAt: String?
 )
 
@@ -27,7 +25,7 @@ object Users : Table<Nothing>("user") {
     val username = varchar("username")
     val email = varchar("email")
     val password = varchar("password")
-    val createdAt = varchar("createdAt")
+    val createdAt = datetime("createdAt")
     val updatedAt = varchar("updatedAt")
 }
 

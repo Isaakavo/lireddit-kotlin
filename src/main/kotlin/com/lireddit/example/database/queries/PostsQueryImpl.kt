@@ -10,6 +10,10 @@ import org.ktorm.database.asIterable
 import org.ktorm.dsl.*
 import org.springframework.stereotype.Repository
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 @Repository
 class PostsQueryImpl(val database: Database) : PostsQuery {
@@ -44,7 +48,7 @@ class PostsQueryImpl(val database: Database) : PostsQuery {
             points = points,
             text = text,
             creatorId = creatorId,
-            creator = User(userId!!, username!!, email!!, null, userCreatedAt, userUpdatedAt)
+            creator = User(userId!!, username!!, email!!, null, userCreatedAt!!, userUpdatedAt)
         )
     }
 
@@ -59,28 +63,26 @@ class PostsQueryImpl(val database: Database) : PostsQuery {
             .singleOrNull()
     }
 
-    override fun findByLimit(limit: Int): List<Post> {
+    override fun findByLimit(limit: Int, cursor: String?): List<Post> {
 
         val query = database
             .from(Posts)
             .innerJoin(Users, on = Posts.creatorId eq Users.id)
-            .select()
-            .orderBy(Posts.createdAt.desc())
-            .limit(limit)
 
-        return query.map { it.toPost() }
+        return if (cursor != null && cursor != "default") {
+            val formatCursor = LocalDateTime.parse(cursor, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            query
+                .select()
+                .where { Posts.createdAt less formatCursor }
+                .orderBy(Posts.createdAt.desc())
+                .limit(limit)
+                .map { it.toPost() }
+        } else {
+            query.select()
+                .orderBy(Posts.createdAt.desc())
+                .limit(limit)
+                .map { it.toPost() }
+        }
 
-//        return listOf(
-//            Post(
-//                1,
-//                "asda",
-//                "asdw",
-//                "Hola",
-//                23,
-//                "asda",
-//                23,
-//                User(1, "sdas", "asd", "asd", "asd", "asd")
-//            )
-//        )
     }
 }
