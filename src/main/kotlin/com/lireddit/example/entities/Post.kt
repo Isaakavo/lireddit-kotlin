@@ -1,9 +1,9 @@
 package com.lireddit.example.entities
 
+import com.lireddit.example.graphql.types.UserType
 import org.ktorm.database.Database
 import org.ktorm.entity.sequenceOf
 import org.ktorm.schema.*
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class Post(
@@ -14,7 +14,7 @@ data class Post(
     val points: Int,
     val text: String,
     val creatorId: Int,
-    val creator: User?
+    val creator: UserType?
 )
 
 

@@ -1,17 +1,18 @@
 package com.lireddit.example.database.queries
 
-import com.lireddit.example.entities.User
 import com.lireddit.example.entities.Users
 import com.lireddit.example.graphql.types.UserType
 import com.lireddit.example.usecases.user.UsersQuery
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
 import org.springframework.stereotype.Repository
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 @Repository
 class UsersQueryImpl(val database: Database) : UsersQuery {
 
-    private fun QueryRowSet.toUser(): User {
+    private fun QueryRowSet.toUserType(): UserType {
         val id = this[Users.id]
         val username = this[Users.username]
         val email = this[Users.email]
@@ -22,29 +23,28 @@ class UsersQueryImpl(val database: Database) : UsersQuery {
         checkNotNull(email)
 //        checkNotNull(createdAt)
 
-        return User(
+        return UserType(
             id = id!!,
             username = username,
             email = email,
-            null,
-            createdAt = createdAt!!,
+            createdAt = ZonedDateTime.of(createdAt!!, ZoneId.systemDefault()),
             updatedAt = null
         )
     }
 
 
-    override fun findByUsernameOrEmail(usernameOrEmail: String): User? {
+    override fun findByUsernameOrEmail(usernameOrEmail: String): UserType? {
         return if (usernameOrEmail.contains("@")) {
             database.from(Users).select()
                 .where { Users.email eq usernameOrEmail }
                 .limit(1)
-                .map { it.toUser() }
+                .map { it.toUserType() }
                 .singleOrNull()
         } else {
             database.from(Users).select()
                 .where { Users.username eq usernameOrEmail }
                 .limit(1)
-                .map { it.toUser() }
+                .map { it.toUserType() }
                 .singleOrNull()
         }
     }

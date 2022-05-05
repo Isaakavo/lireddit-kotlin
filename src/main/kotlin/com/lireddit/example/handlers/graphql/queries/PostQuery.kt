@@ -10,10 +10,11 @@ class PostQuery(private val postSearcher: PostSearcher) : Query {
     @Suppress("unused")
 
     fun post(id: Int): PostType? {
-        return postSearcher.findOne(id)?.let { PostType(it) }
+        return postSearcher.findOne(id)
     }
 
     fun posts(limit: Int, cursor: String? = "default"): List<PostType> {
-        return postSearcher.allPosts(limit, cursor).map { PostType(it) }
+        return postSearcher.allPosts(limit, cursor)
+            .map { PostType(it.id, it.createdAt, it.updatedAt, it.title, it.points, it.text, it.creatorId, it.creator) }
     }
 }

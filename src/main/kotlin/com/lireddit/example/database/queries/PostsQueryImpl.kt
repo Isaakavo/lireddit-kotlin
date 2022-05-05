@@ -1,15 +1,13 @@
 package com.lireddit.example.database.queries
 
-import com.lireddit.example.entities.Post
 import com.lireddit.example.entities.Posts
-import com.lireddit.example.entities.User
 import com.lireddit.example.entities.Users
+import com.lireddit.example.graphql.types.PostType
+import com.lireddit.example.graphql.types.UserType
 import com.lireddit.example.usecases.post.PostsQuery
 import org.ktorm.database.Database
-import org.ktorm.database.asIterable
 import org.ktorm.dsl.*
 import org.springframework.stereotype.Repository
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -18,7 +16,7 @@ import java.time.format.DateTimeFormatter
 @Repository
 class PostsQueryImpl(val database: Database) : PostsQuery {
 
-    private fun QueryRowSet.toPost(): Post {
+    private fun QueryRowSet.toPost(): PostType {
         val id = this[Posts.id]
         val createdAt = this[Posts.createdAt]
         val updatedAt = this[Posts.updatedAt]
@@ -40,19 +38,19 @@ class PostsQueryImpl(val database: Database) : PostsQuery {
         checkNotNull(text)
         checkNotNull(creatorId)
 
-        return Post(
+        return PostType(
             id = id,
-            createdAt = createdAt,
+            createdAt = ZonedDateTime.of(createdAt, ZoneId.systemDefault()),
             updatedAt = updatedAt,
             title = title,
             points = points,
             text = text,
             creatorId = creatorId,
-            creator = User(userId!!, username!!, email!!, null, userCreatedAt!!, userUpdatedAt)
+            creator = UserType(userId!!, username!!, email!!, ZonedDateTime.of(userCreatedAt, ZoneId.systemDefault()), userUpdatedAt)
         )
     }
 
-    override fun findById(id: Int): Post? {
+    override fun findById(id: Int): PostType? {
         return database
             .from(Posts)
             .innerJoin(Users, on = Posts.creatorId eq Users.id)
@@ -63,7 +61,7 @@ class PostsQueryImpl(val database: Database) : PostsQuery {
             .singleOrNull()
     }
 
-    override fun findByLimit(limit: Int, cursor: String?): List<Post> {
+    override fun findByLimit(limit: Int, cursor: String?): List<PostType> {
 
         val query = database
             .from(Posts)
