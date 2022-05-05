@@ -46,7 +46,7 @@ class PostsQueryImpl(val database: Database) : PostsQuery {
             points = points,
             text = text,
             creatorId = creatorId,
-            creator = UserType(userId!!, username!!, email!!, ZonedDateTime.of(userCreatedAt, ZoneId.systemDefault()), userUpdatedAt)
+            creator = UserType(userId!!, username!!, email!!, null, ZonedDateTime.of(userCreatedAt, ZoneId.systemDefault()), userUpdatedAt)
         )
     }
 

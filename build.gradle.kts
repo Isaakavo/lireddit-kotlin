@@ -32,6 +32,9 @@ dependencies {
 	implementation("com.expediagroup:graphql-kotlin-schema-generator:5.3.2")
 	implementation("com.expediagroup:graphql-kotlin-spring-server:5.3.2")
 	implementation("com.graphql-java:graphql-java-extended-scalars:17.0")
+
+	//Argon2
+	implementation("de.mkammerer:argon2-jvm:2.1")
 }
 
 tasks.withType<KotlinCompile> {

@@ -12,6 +12,6 @@ import java.time.ZonedDateTime
 @Repository
 class UsersRepositoryImpl(val database: Database): UsersRepository {
     override fun loginUser(user: UserType): UserType {
-        return UserType(1, "isaakavo", "asdad",  ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault()), "asdasd")
+        return UserType(1, "isaakavo", "asdad", null, ZonedDateTime.of(LocalDateTime.now(), ZoneId.systemDefault()), "asdasd")
     }
 }

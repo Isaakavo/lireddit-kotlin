@@ -5,6 +5,7 @@ import com.lireddit.example.graphql.types.UserType
 import com.lireddit.example.usecases.user.UsersQuery
 import org.ktorm.database.Database
 import org.ktorm.dsl.*
+import org.ktorm.schema.ColumnDeclaring
 import org.springframework.stereotype.Repository
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -16,6 +17,7 @@ class UsersQueryImpl(val database: Database) : UsersQuery {
         val id = this[Users.id]
         val username = this[Users.username]
         val email = this[Users.email]
+        val password = this[Users.password]
         val createdAt = this[Users.createdAt]
 
 //        checkNotNull(id)
@@ -27,6 +29,7 @@ class UsersQueryImpl(val database: Database) : UsersQuery {
             id = id!!,
             username = username,
             email = email,
+            password = password,
             createdAt = ZonedDateTime.of(createdAt!!, ZoneId.systemDefault()),
             updatedAt = null
         )
@@ -35,17 +38,19 @@ class UsersQueryImpl(val database: Database) : UsersQuery {
 
     override fun findByUsernameOrEmail(usernameOrEmail: String): UserType? {
         return if (usernameOrEmail.contains("@")) {
-            database.from(Users).select()
-                .where { Users.email eq usernameOrEmail }
-                .limit(1)
-                .map { it.toUserType() }
-                .singleOrNull()
+            databaseQuery(Users.email, usernameOrEmail)
         } else {
-            database.from(Users).select()
-                .where { Users.username eq usernameOrEmail }
-                .limit(1)
-                .map { it.toUserType() }
-                .singleOrNull()
+            databaseQuery(Users.username, usernameOrEmail)
         }
+    }
+
+    private fun databaseQuery(user: ColumnDeclaring<String>, usernameOrEmail: String): UserType? {
+        return database
+            .from(Users)
+            .select()
+            .where { user eq usernameOrEmail }
+            .limit(1)
+            .map { it.toUserType() }
+            .singleOrNull()
     }
 }

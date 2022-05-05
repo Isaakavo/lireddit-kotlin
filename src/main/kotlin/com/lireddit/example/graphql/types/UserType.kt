@@ -8,6 +8,7 @@ data class UserType(
     val id: Int?,
     val username: String,
     val email: String,
+    val password: String?,
     val createdAt: ZonedDateTime?,
     val updatedAt: String?
 ) {
@@ -15,6 +16,7 @@ data class UserType(
         user.id,
         user.username,
         user.email,
+        user.password,
         user.createdAt,
         user.updatedAt
     )
